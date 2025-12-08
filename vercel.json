@@ -1,0 +1,157 @@
+interface BuildCommand {
+  command: string;
+  output?: string;
+}
+
+interface EnvTemplate {
+  [key: string]: string;
+}
+
+interface RedirectRule {
+  source: string;
+  destination: string;
+  status: number;
+}
+
+interface HeaderPolicy {
+  source: string;
+  headers: Array<{ key: string; value: string }>;
+}
+
+interface CacheStrategy {
+  urlPattern: string;
+  options?: { [key: string]: any };
+}
+
+interface FrameworkSettings {
+  vercel?: { [key: string]: any };
+  netlify?: { [key: string]: any };
+}
+
+interface DeployConfig {
+  build: BuildCommand;
+  env: EnvTemplate;
+  redirects: Array<RedirectRule>;
+  headers: Array<HeaderPolicy>;
+  cacheStrategies: Array<CacheStrategy>;
+  frameworkSettings: FrameworkSettings;
+}
+
+export const deployConfig: DeployConfig = {
+  build: {
+    command: "next build && next export",
+    output: ".out"
+  },
+  env: {
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
+    NEXT_PUBLIC_STRIPE_KEY: process.env.NEXT_PUBLIC_STRIPE_KEY
+  },
+  redirects: [
+    { source: "/old-url", destination: "/new-url", status: 301 }
+  ],
+  headers: [
+    {
+      source: "/(.*)",
+      headers: [
+        { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
+        { key: "X-Frame-Options", value: "DENY" }
+      ]
+    }
+  ],
+  cacheStrategies: [
+    {
+      urlPattern: "/api/(.*)",
+      options: { immutable: true, maxAgeSeconds: 3600 }
+    }
+  ],
+  frameworkSettings: {
+    vercel: {
+      buildCommand: "next build && next export",
+      outDir: ".out"
+    },
+    netlify: {
+      buildContext: {
+        NODE_ENV: "production"
+      }
+    }
+  }
+};
+
+interface BuildCommand {
+  command: string;
+  output?: string;
+}
+
+interface EnvTemplate {
+  [key: string]: string;
+}
+
+interface RedirectRule {
+  source: string;
+  destination: string;
+  status: number;
+}
+
+interface HeaderPolicy {
+  source: string;
+  headers: Array<{ key: string; value: string }>;
+}
+
+interface CacheStrategy {
+  urlPattern: string;
+  options?: { [key: string]: any };
+}
+
+interface FrameworkSettings {
+  vercel?: { [key: string]: any };
+  netlify?: { [key: string]: any };
+}
+
+interface DeployConfig {
+  build: BuildCommand;
+  env: EnvTemplate;
+  redirects: Array<RedirectRule>;
+  headers: Array<HeaderPolicy>;
+  cacheStrategies: Array<CacheStrategy>;
+  frameworkSettings: FrameworkSettings;
+}
+
+export const deployConfig: DeployConfig = {
+  build: {
+    command: "next build && next export",
+    output: ".out"
+  },
+  env: {
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
+    NEXT_PUBLIC_STRIPE_KEY: process.env.NEXT_PUBLIC_STRIPE_KEY
+  },
+  redirects: [
+    { source: "/old-url", destination: "/new-url", status: 301 }
+  ],
+  headers: [
+    {
+      source: "/(.*)",
+      headers: [
+        { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
+        { key: "X-Frame-Options", value: "DENY" }
+      ]
+    }
+  ],
+  cacheStrategies: [
+    {
+      urlPattern: "/api/(.*)",
+      options: { immutable: true, maxAgeSeconds: 3600 }
+    }
+  ],
+  frameworkSettings: {
+    vercel: {
+      buildCommand: "next build && next export",
+      outDir: ".out"
+    },
+    netlify: {
+      buildContext: {
+        NODE_ENV: "production"
+      }
+    }
+  }
+};

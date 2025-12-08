@@ -1,0 +1,175 @@
+import { BuildCommand, EnvVars, HeaderRules } from './types'; // Assuming custom types are defined in a separate file
+
+interface DeployConfig {
+  build: BuildCommand;
+  env: EnvVars;
+  headers: HeaderRules[];
+  redirects?: RedirectRule[];
+  securityHeaders?: SecurityHeader[];
+  cachingStrategies?: CachingStrategy[];
+}
+
+interface BuildCommand {
+  command: string;
+  output: string;
+}
+
+interface EnvVars extends Record<string, string> {}
+
+interface HeaderRules {
+  source: string;
+  headers: Array<{ key: string; value: string }>;
+}
+
+interface RedirectRule {
+  from: string;
+  to: string;
+  status?: number;
+}
+
+interface SecurityHeader {
+  source: string;
+  header: { key: string; value: string };
+}
+
+interface CachingStrategy {
+  urlPattern: string;
+  headers: Array<{ key: string; value: string }>;
+}
+
+export const deployConfig: DeployConfig = {
+  build: {
+    command: 'next build',
+    output: '.next',
+  },
+  env: {
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
+    NEXT_PUBLIC_STRIPE_KEY: process.env.NEXT_PUBLIC_STRIPE_KEY,
+    DATABASE_URL: process.env.DATABASE_URL,
+  },
+  headers: [
+    {
+      source: '/(.*)',
+      headers: [
+        { key: 'Strict-Transport-Security', value: 'max-age=31536000; includeSubDomains; preload' },
+        { key: 'X-Frame-Options', value: 'DENY' },
+        { key: 'X-XSS-Protection', value: '1; mode=block' },
+      ],
+    },
+  ],
+  redirects: [
+    {
+      from: '/old-url',
+      to: '/new-url',
+      status: 302,
+    },
+  ],
+  securityHeaders: [
+    {
+      source: '/(.*)',
+      header: { key: 'Content-Security-Policy', value: "default-src 'self'; script-src 'self' 'unsafe-inline';" },
+    },
+  ],
+  cachingStrategies: [
+    {
+      urlPattern: '/api/(.*)',
+      headers: [
+        { key: 'Cache-Control', value: 's-maxage=1, stale-while-revalidate=5' },
+      ],
+    },
+    {
+      urlPattern: '/static/(.*)',
+      headers: [
+        { key: 'Cache-Control', value: 'public, max-age=31536000' },
+      ],
+    },
+  ],
+};
+
+import { BuildCommand, EnvVars, HeaderRules } from './types'; // Assuming custom types are defined in a separate file
+
+interface DeployConfig {
+  build: BuildCommand;
+  env: EnvVars;
+  headers: HeaderRules[];
+  redirects?: RedirectRule[];
+  securityHeaders?: SecurityHeader[];
+  cachingStrategies?: CachingStrategy[];
+}
+
+interface BuildCommand {
+  command: string;
+  output: string;
+}
+
+interface EnvVars extends Record<string, string> {}
+
+interface HeaderRules {
+  source: string;
+  headers: Array<{ key: string; value: string }>;
+}
+
+interface RedirectRule {
+  from: string;
+  to: string;
+  status?: number;
+}
+
+interface SecurityHeader {
+  source: string;
+  header: { key: string; value: string };
+}
+
+interface CachingStrategy {
+  urlPattern: string;
+  headers: Array<{ key: string; value: string }>;
+}
+
+export const deployConfig: DeployConfig = {
+  build: {
+    command: 'next build',
+    output: '.next',
+  },
+  env: {
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
+    NEXT_PUBLIC_STRIPE_KEY: process.env.NEXT_PUBLIC_STRIPE_KEY,
+    DATABASE_URL: process.env.DATABASE_URL,
+  },
+  headers: [
+    {
+      source: '/(.*)',
+      headers: [
+        { key: 'Strict-Transport-Security', value: 'max-age=31536000; includeSubDomains; preload' },
+        { key: 'X-Frame-Options', value: 'DENY' },
+        { key: 'X-XSS-Protection', value: '1; mode=block' },
+      ],
+    },
+  ],
+  redirects: [
+    {
+      from: '/old-url',
+      to: '/new-url',
+      status: 302,
+    },
+  ],
+  securityHeaders: [
+    {
+      source: '/(.*)',
+      header: { key: 'Content-Security-Policy', value: "default-src 'self'; script-src 'self' 'unsafe-inline';" },
+    },
+  ],
+  cachingStrategies: [
+    {
+      urlPattern: '/api/(.*)',
+      headers: [
+        { key: 'Cache-Control', value: 's-maxage=1, stale-while-revalidate=5' },
+      ],
+    },
+    {
+      urlPattern: '/static/(.*)',
+      headers: [
+        { key: 'Cache-Control', value: 'public, max-age=31536000' },
+      ],
+    },
+  ],
+};
